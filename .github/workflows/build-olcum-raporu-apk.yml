@@ -10,6 +10,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,7 +18,7 @@ jobs:
       - name: Check source archive
         run: |
           test -f OLCUM_RAPORU_SOURCE.zip || {
-            echo "Repository root must contain OLCUM_RAPORU_SOURCE.zip"
+            echo "OLCUM_RAPORU_SOURCE.zip bulunamadi!"
             exit 1
           }
 
@@ -41,7 +42,12 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install dependencies
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Install npm dependencies
         working-directory: app-source
         run: npm install
 
